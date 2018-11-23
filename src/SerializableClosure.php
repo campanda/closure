@@ -390,7 +390,13 @@ class SerializableClosure implements Serializable
                         continue;
                     }
                     $property->setAccessible(true);
-                    $value = $property->getValue($instance);
+                    try {
+                        $value = $property->getValue($instance);
+                    } catch (\Throwable $e) {
+                        continue;
+                    } catch (\Exception $e) {
+                        continue;
+                    }
                     if(is_array($value) || is_object($value)){
                         static::wrapClosures($value, $storage);
                     }
